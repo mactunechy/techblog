@@ -1,0 +1,45 @@
+{%extends 'base.html'%}
+{% block content%}
+<h1>{{post.title}}</h1>
+<i class="fa fa-bullhorn"></i> &nbsp;by: &nbsp;{{post.author}}<br>
+<i class="fa fa-calendar"></i>&nbsp; {% if post.published_date %}
+publish date:&nbsp; {{post.published_date|date:"D M Y"}}
+{% else %}
+Create date : {{post.create_date|date:"D M Y"}}
+
+<a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}"> Publish</a>
+{% endif%}
+<p class="postcontent">{{post.text|safe|linebreaks}}</p>
+
+{%if user.is_authenticated %}
+<a class="edit btn bt-primary" href="{% url 'post_edit' pk=post.pk %}"><i class="fa fa-pencil"></i> edit </a>
+<a class="btn remove bt-danger" href="{% url 'post_remove' pk=post.pk %}"> <i class="fa fa-remove"></i>delete </a>
+{% endif %}
+<hr>
+<div class=""> <h3>Comments</h3></div>
+{% for comment in post.comments.all %}
+
+<div class="postcomment">
+	by:{{comment.author}}<br>
+	<p>
+		{{comment.text|safe|linebreaks}}
+	</p>
+	<hr>	
+	
+	{% if user.is_authenticated %}
+		{% if not comment.approve_comment %}
+		<a class="btn bt-default" href="{% url 'comment_approve' pk=comment.pk %}"> <i class="fa fa-check-square"></i> approve</a>
+		{% endif %}
+<a class="btn bt-default" href="{% url 'comment_remove' pk=comment.pk %}"><i class="fa fa-remove">delete</i></a>
+	{% endif %}	
+	{% empty %}
+	<p>No Comments</p>
+</div>
+{% endfor%}	
+
+{% if post.published_date %}
+<div class="container">
+<a href="{% url 'add_comment_to_post' pk=post.pk %}"><i class="fa fa-pencil"></i>comment</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content%}
+{% for post in post_list %}
+	 <p class="author">{{post.username}}</p>
+	 <p>date created: {{post.create_date|date:"D M Y"}}</p>
+	 <p class="text">{{post.text|safe|linebreaks|truncatewords:"30"}}</p>
+	 <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}"> 
+	 Publish</a>
+	 <a class="btn btn-primary " href="{% url 'post_edit' pk=post.pk %}"><i class="fa fa-pencil"></i>edit</a>
+	  <a class="btn btn-warning " href="{% url 'post_remove' pk=post.pk %}"><i class="fa fa-remove"></i> delete</a>
+	 
+
+{% empty %}
+
+<h2>No drafts</h2>
+<a href="{% url 'create_post' %}">Create a post</a>
+
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="centerpost">
+	{% for post in post_list %}
+	<a href="{% url 'post_detail' pk=post.pk %}"><h1>{{post.title}}</h1> <i class="fa fa-calendar"></i></a>
+	published date : {{post.published_date|date:"D M Y"}} <br>
+	by: {{post.author}} | 	<a href="{% url 'post_detail' pk=post.pk %}">comments:<span class=" badge badge-default">{{post.approved_comments.count}}</a>|&nbsp;<a>likes:</a><span class = 'badge  badge-default'>{{post.likes}}</span>
+	<p>{{post.text|truncatewords:"30"}}</p>
+	<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}"> <i class='fa fa-pencil'></i>comment</a>| &nbsp; <a href="{% url 'like' pk=post.pk %}"><i class="fa fa-check-circle-o"></i> like </a> 
+	{% endfor%}
+	
+</div>
+
+
+
+{% endblock %}
