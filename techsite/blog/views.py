@@ -36,8 +36,17 @@ class Post_detail(DetailView):
 class Create_post(LoginRequiredMixin,CreateView):
 	login_url = '/login/'
 	redirect_field_name = 'blog/post_detail.html'
-	form_class = PostForm	
+	form_class = PostForm
 	model = Post
+
+
+	def form_valid(self,form):
+		post = form.save(commit=False)
+		author = self.request.user
+		post.author = author
+		post.save()
+		return redirect('post_detail',pk=post.pk)	
+	
 	
 	
 class DeletePost(LoginRequiredMixin,DeleteView):
